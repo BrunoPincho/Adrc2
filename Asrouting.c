@@ -185,10 +185,58 @@ void removeNodeHeap2(int array[][2],int Toremove,int length){
 }
 
 
+int pathtype(int caminho,int novo){
+	int type;
+		switch (caminho){
+			case 0:{
+					 switch(novo){
+					 		case 0: {	
+					 					return 0;
+					 					break;
+					 				}
+					 		case 1:{
+					 					
+					 					return 1;
+					 					break;
+					 		}
+					 		case 2:{    
+					 					return 2;
+					 					break;
+
+					 				}
+
+					 	}
+					
+					 	break;
+
+					}
+
+			case 1:{
+						if(novo == 0 || novo == 1){
+							return 1;
+							break;
+							}
+					}
+
+			case 2:{
+						return 2;
+						break;
+					}
+
+
+		}
+
+
+	return type;
+}
+
+
+
 int hopglobal = INT_MAX;
 int* bestpath;
+int besttype=-1;
 
-void pathfinder(struct grafo*ref,int origem,int destino,int path[],int hop,int extension){
+void pathfinder(struct grafo*ref,int origem,int destino,int path[],int hop,int extension, int typep){
 
 int i=0;
 int k;
@@ -249,15 +297,20 @@ int counter1=0;
 					}
 				}
 
-				if(min_node == destino){
+				if(min_node == destino || origem == destino){
 					path[hop]=origem;
 					hop++;
 					path[hop]=destino;
-					if(hop<hopglobal){
+						if(besttype == -1)
+							besttype = pathtype(typep,atribute);
+
+					if(hop<hopglobal && ((besttype == pathtype(typep,atribute)) || (pathtype(typep,atribute)<besttype) )) {
 						free(bestpath);
 						bestpath = (int*)malloc(hop*sizeof(int));
 						for(i=0;i<=hop;i++)
 							bestpath[i]=path[i];
+							besttype = pathtype(typep,atribute);
+							hopglobal = hop;
 					}
 					bestpath[hop+1]='\0';
 					return;
@@ -271,7 +324,7 @@ int counter1=0;
 								if(CRP[extension][0]>-1){
 									path[hop]=origem;
 									hop++;
-									pathfinder(ref,min_node,destino,path,hop,atribute);
+									pathfinder(ref,min_node,destino,path,hop,atribute,pathtype(0,atribute));
 									hop--;
 								}
 
@@ -279,7 +332,7 @@ int counter1=0;
 							if(CRP[extension][atribute]>-1){
 									path[hop]=origem;
 									hop++;
-									pathfinder(ref,min_node,destino,path,hop,atribute);
+									pathfinder(ref,min_node,destino,path,hop,atribute,pathtype(typep,atribute));
 									hop--;
 								}
 							}
@@ -336,16 +389,35 @@ int main(){
 	//addnode(listadjacent,2,1,2);
 	int path[5];
 	i=0;
+	int dest;
+		printf("qual o nodo destino?\n");
+		scanf("%d",&dest);
+
 	while(i<(edgecount/2 -1)){
 
-		pathfinder(listadjacent,listadjacent->array[i].num,9,path,0,-1);
+		if((listadjacent->array[i].num) != dest){
+			pathfinder(listadjacent,listadjacent->array[i].num,dest,path,0,-1,0);
+		
 
-		printf("Melhor caminho de %d para 9",listadjacent->array[i].num);
-		j=0;
-		while(bestpath[j]!='\0'){
-			printf("%d",bestpath[j]);
+			printf("\nMelhor caminho de %d para %d:\n",listadjacent->array[i].num,dest);
+			j=0;
+			while(bestpath[j]!='\0'){
+				printf("%d-",bestpath[j]);
+				j++;
+			}
+			switch(besttype){
+					case 0:printf("\n client route\n");
+							break;
+					case 1:printf("\n Peer route\n");
+							break;
+					case 2:printf("\n Provider route\n");
+							break;
+			}
 		}
 
+		besttype = -1;
+		hopglobal = INT_MAX;
+		i++;
 	}
 	fclose(fp);
 }
