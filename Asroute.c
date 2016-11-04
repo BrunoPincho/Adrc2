@@ -236,6 +236,7 @@ int hopglobal = INT_MAX;
 int* bestpath;
 int besttype=-1;
 
+
 void pathfinder(struct grafo*ref,int origem,int destino,int path[],int hop,int extension, int typep){
 
 int i=0;
@@ -344,6 +345,8 @@ int counter1=0;
 
 			}
 
+			
+
 
 }
 
@@ -423,18 +426,24 @@ int main(){
 	fclose(fp);
 
 	//addnode(listadjacent,2,1,2);
-	int path[5];
+	int *path;
+
+	
+
 	i=0;
 	int dest;
 		printf("qual o nodo destino?\n");
 		scanf("%d",&dest);
 
 	while(i<buffcount){
+		path = (int*)malloc(nodes*sizeof(int));
+		bzero(path,nodes);
 
 		if((listadjacent->array[i].num) != dest){
+			
 			pathfinder(listadjacent,listadjacent->array[i].num,dest,path,0,-1,0);
 		
-
+		if(besttype!=-1){
 			printf("\nMelhor caminho de %d para %d:\n",listadjacent->array[i].num,dest);
 			j=0;
 			while(bestpath[j]!='\0'){
@@ -448,10 +457,11 @@ int main(){
 							break;
 					case 2:printf("\n Provider route\n");
 							break;
-			}
+				}
+			}else{printf("sem caminho utilizavel de %d para %d\n",listadjacent->array[i].num,dest);}
 		}
-
 		besttype = -1;
+		free(path);
 		hopglobal = INT_MAX;
 		i++;
 	}
