@@ -10,9 +10,9 @@ int main(){
 	int tail;
 	int head;
 	int link;
-
+	int procura;
 	FILE* fp;
-	fp = fopen("As.txt","r");
+	fp = fopen("Network.txt","r");
 
 	//int edgecount=0;
 	
@@ -51,13 +51,19 @@ int main(){
 
 		nodes= 7483647;
 		listadjacent = criagrafo(nodes);
-		fp = fopen("As.txt","r");
+		fp = fopen("Network.txt","r");
 
 		while(fscanf(fp,"%d %d %d",&tail,&head,&link)!=	EOF){
 			addnode(listadjacent,tail,head,link,buffcount);	
 		}
-
-		djishort(listadjacent,9);
+		printf("qual o nodo a procurar?");
+		scanf("%d",&procura);
+		djishort(listadjacent,procura);
 		fclose(fp);
+		while(1){
+			printf("distancia para que nodo?");
+			scanf("%d",&procura);
+			printf("nº de Hops:%d - Nodo Prévio: %d  (ctrl-c pra sair)\n",listadjacent->array[7483647-procura].dist,listadjacent->array[7483647-procura].parent);
+		}
 
 }
