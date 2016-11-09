@@ -18,9 +18,11 @@ struct lista{
 	int num;
 	int len;
 	int dist;
+	int extension;
 	int parent;
 	int seen;
 	int previous;
+	int Pathtype;
 	struct node* pointer;
 };
 
@@ -32,7 +34,9 @@ struct grafo* criagrafo(int nodes);
 
 void addnode(struct grafo*ref,int tail,int head,int linktype,int Vertices);
 
-void djishort(struct grafo*ref,int destination);
+void comroute(struct grafo*ref,int destination);
+
+int pathtype(int caminho,int novo);
 
 
 #endif

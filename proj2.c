@@ -2,6 +2,7 @@
 
 
 int main(){
+	//The following is the maximum 32-bit number that you can have minus the 3 most significant bits
 	int *buffmax=(int*)malloc(7483647*sizeof(int));
 	int buffcount=0;
 	int nodes;
@@ -12,29 +13,8 @@ int main(){
 	int link;
 	int procura;
 	FILE* fp;
-	fp = fopen("Network.txt","r");
+	fp = fopen("As.txt","r");
 
-	//int edgecount=0;
-	
-
-		
-	/*
-		while(fscanf(fp,"%d %d %d",&tail,&head,&link)!=	EOF){
-
-			for(i=0;i<=buffcount;i++){
-				if(buffmax[i]==tail){
-					break;
-				}else if(i==buffcount){
-					buffmax[buffcount]=tail;
-					buffcount++;
-					break;
-				}
-
-
-			}
-				
-		}
-		fclose(fp);*/
 
 		while(fscanf(fp,"%d %d %d",&tail,&head,&link)!=	EOF){
 
@@ -51,19 +31,19 @@ int main(){
 
 		nodes= 7483647;
 		listadjacent = criagrafo(nodes);
-		fp = fopen("Network.txt","r");
+		fp = fopen("As.txt","r");
 
 		while(fscanf(fp,"%d %d %d",&tail,&head,&link)!=	EOF){
 			addnode(listadjacent,tail,head,link,buffcount);	
 		}
+
 		printf("qual o nodo a procurar?");
 		scanf("%d",&procura);
-		djishort(listadjacent,procura);
+		comroute(listadjacent,procura);
 		fclose(fp);
 		while(1){
-			printf("distancia para que nodo?");
+			printf("\ndistancia para que nodo?");
 			scanf("%d",&procura);
-			printf("nº de Hops:%d - Nodo Prévio: %d  (ctrl-c pra sair)\n",listadjacent->array[7483647-procura].dist,listadjacent->array[7483647-procura].parent);
+			printf("nº de Hops:%d - Nodo Prévio: %d -tipo de rota:%d (ctrl-c pra sair)\n",listadjacent->array[7483647-procura].dist,listadjacent->array[7483647-procura].parent,listadjacent->array[7483647-procura].Pathtype);
 		}
-
 }
